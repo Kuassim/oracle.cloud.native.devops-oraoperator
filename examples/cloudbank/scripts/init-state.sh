@@ -24,11 +24,11 @@ state_set '.lab.pwd.login |= $VAL' $FEPWD
 echo "SET"
 
 # requires Reqion
-read -p "Enter the region to use (e.g. phx, iad, etc.): " INP
+read -p "Enter the region to use (e.g. us-phoenix-1): " INP
 state_set '.lab.region.identifier |= $VAL' $INP
 
 # requires Reqion Key
-read -p "Enter the region-key to use (e.g. us-phoenix-1): " RKEY
+read -p "Enter the region-key to use (e.g. phx, iad, etc.): " RKEY
 state_set '.lab.region.key |= $VAL' $RKEY
 
 # requires OCIR registry
