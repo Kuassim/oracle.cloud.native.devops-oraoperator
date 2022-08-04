@@ -25,20 +25,3 @@ if [  $? -eq 0 ]; then
 fi
 
 
-#export IS_CREATE_REPOS=$1
-#if [ -z "IS_CREATE_REPOS" ]; then
-#    echo "not creating OCIR repos"
-#else
-#    echo "creating OCIR repos and setting to public"
-#    if [ -z "$COMPARTMENT_OCID" ]; then
-#        echo "COMPARTMENT_OCID not set. Will get it with state_get"
-#        export COMPARTMENT_OCID=$(state_get COMPARTMENT_OCID)
-#    fi
-#    if [ -z "RUN_NAME" ]; then
-#        echo "RUN_NAME not set. Will get it with state_get"
-#        export RUN_NAME=$(state_get RUN_NAME)
-#    fi
-##    RUN_NAME is randomly generated name from workshop, eg gd4930131
-#    oci artifacts container repository create --compartment-id "$COMPARTMENT_OCID" --display-name "$RUN_NAME/$IMAGE_NAME" --is-public true
-#fi
-

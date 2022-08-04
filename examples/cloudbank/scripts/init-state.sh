@@ -10,8 +10,6 @@
 # - Fingerprint
 # - OCI Registry
 # - Jenkins Password
-# todo: generate tokens for cicd webhooks
-STATE_LOCATION=$CB_STATE_DIR/state.json
 
 
 # requires Database Password
@@ -26,7 +24,7 @@ state_set '.lab.pwd.login |= $VAL' $FEPWD
 echo "SET"
 
 # requires Reqion
-read -p "Enter the region to use (e.g. us-phoenix-1): " INP
+read -p "Enter the region to use (e.g. phx, iad, etc.): " INP
 state_set '.lab.region.identifier |= $VAL' $INP
 
 # requires Reqion Key
@@ -58,29 +56,3 @@ state_set '.lab.apikey.fingerprint |= $VAL' $fPRINTVAL
 read -s -r -p "Enter the Jenkins credentials to use: " JPWD
 state_set '.lab.pwd.jenkins |= $VAL' $JPWD
 echo "SET"
-
-
-# Check which database kind will the user go with for the lab
-echo ""
-echo 'Available Database Options for the Lab'
-PS3='Please select the type of Database you plan to use (1 or 2): '
-options=("Option 1: Oracle Autonomous Database (ADB)" "Option 2: Oracle Single Instance Database (SIDB)")
-select opt in "${options[@]}"
-do
-    case $opt in
-        "Option 1: Oracle Autonomous Database (ADB)")
-                CONFIGURATION='ADB'
-                echo "You have selected Oracle Autonomous Database (ADB)"
-                break
-                ;;
-        "Option 2: Oracle Single Instance Database (SIDB)")
-                    CONFIGURATION='SIDB'
-                    echo "You have selected Oracle Single Instance Database (SIDB)"
-                    break
-                    ;;
-        *) echo "You entered an invalid option: $REPLY. Please use the number of the option to decide.";;
-    esac
-done
-state_set '.lab.database.selected |= $VAL' $CONFIGURATION
-echo ""
-

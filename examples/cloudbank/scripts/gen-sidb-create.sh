@@ -10,7 +10,7 @@ SIDB_NAMESPACE=cloudbank
 SIDB_PWD_SECRET=sidb-admin-secret
 
 # run task
-$CB_STATE_DIR/generate-yaml-sidb-create.sh $SRC_FILE $YAML_FILE $SIDB_NAME $SIDB_NAMESPACE $SIDB_PWD_SECRET
+$CB_STATE_DIR/tasks/generate-yaml-sidb-create.sh $SRC_FILE $YAML_FILE $SIDB_NAME $SIDB_NAMESPACE $SIDB_PWD_SECRET
 
 # Output copy
 echo ""
