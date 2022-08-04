@@ -59,7 +59,7 @@ $CB_STATE_DIR/init-state.sh
 
 # Set (3) Tokens for Jenkins
 echo -n 'Generate tokens...'
-$CB_STATE_DIR/task/generate-tokens.sh
+$CB_STATE_DIR/tasks/generate-tokens.sh
 echo 'DONE'
 echo ''
 
