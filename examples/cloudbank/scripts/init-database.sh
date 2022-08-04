@@ -3,8 +3,6 @@ CURRENT_TIME=$( date '+%F_%H:%M:%S' )
 
 # Mark Start of Script
 state_set '.state.dbsetup|= $VAL' STARTED
-
-# Check which database kind will be provisioned
 echo -n "Initializing Autonomous Database (ADB)..."
 
 # Download ADB Wallet
@@ -21,7 +19,7 @@ if [ -z "$password" ]; then
 fi
 echo ''
 
-# Navigate to SQL directory
+# Navigate to SQL directory and Run Initialization
 touch $CB_STATE_DIR/logs/$CURRENT_TIME-sql-setup.log
 (cd $CB_ROOT_DIR/sql || exit ;  ./configure-adb.sh $location $password $CONNSERVICE > $CB_STATE_DIR/logs/$CURRENT_TIME-sql-setup.log)
 echo "DONE"

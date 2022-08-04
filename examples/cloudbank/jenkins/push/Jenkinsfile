@@ -6,17 +6,21 @@ pipeline {
     stages {
         stage('push-to-feature-branch') {
             when {
-                branch pattern: "ft-cbtrfdev*"
+                expression { params.ref_value ==~ /^feature\/([a-z0-9]+)(\/\w+)*/ }
             }
             stages {
                 stage("build") {
-                    dir("examples/cloudbank/backend-springboot") {
-                        sh "mvn clean package"
+                    steps {
+                        dir("examples/cloudbank/backend-springboot") {
+                            sh "mvn clean package"
+                        }
                     }
                 }
                 stage("run tests") {
-                    dir("examples/cloudbank/backend-springboot") {
-                        echo "Running tests"
+                    steps {
+                        dir("examples/cloudbank/backend-springboot") {
+                            echo "Running tests"
+                        }
                     }
                 }
             }

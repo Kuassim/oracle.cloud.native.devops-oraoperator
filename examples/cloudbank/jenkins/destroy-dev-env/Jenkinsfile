@@ -1,9 +1,9 @@
 pipeline {
     agent any
     environment {
-        CLUSTER_NAME="cluster-cwz7kgdbhgq"
+        CLUSTER_NAME=credentials("cbworkshop-cluster-name")
         CLUSTER_NAMESPACE="cloudbank"
-        CLUSTER_SERVER_URL="https://132.226.124.76:6443"
+        CLUSTER_SERVER_URL=credentials("cbworkshop-cluster-server-url")
     }
     parameters {
         string(name: 'ref_value', defaultValue: '', description: 'Payload ref')
@@ -28,7 +28,7 @@ pipeline {
             printPostContent: false,
             silentResponse: false,
             regexpFilterText: '$ref_value',
-            regexpFilterExpression: '^dev/\\w+[a-z0-9]*'
+            regexpFilterExpression: '^feature\/([a-z0-9]+)(\/\w+)*'
         )
     }
     stages {

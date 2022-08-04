@@ -1,11 +1,14 @@
 pipeline {
     agent any
+    tools {
+        maven "m3"
+    }
     environment {
-        CLUSTER_NAME="cluster-cwz7kgdbhgq"
+        CLUSTER_NAME=credentials("cbworkshop-cluster-name")
         CLUSTER_NAMESPACE="cloudbank"
-        CLUSTER_SERVER_URL="https://132.226.124.76:6443"
-        REGION_KEY="phx"
-        TENANCY_NAMESPACE="oracleonpremjava"
+        CLUSTER_SERVER_URL=credentials("cbworkshop-cluster-server-url")
+        REGION_KEY=credentials("cbworkshop-region-key")
+        TENANCY_NAMESPACE=credentials("cbworkshop-tenancy-namespace")
         DOCKER_REGISTRY="${REGION_KEY}.ocir.io/${TENANCY_NAMESPACE}/cloudbank/transfer-springboot"
     }
     parameters {
@@ -31,24 +34,25 @@ pipeline {
             printPostContent: false,
             silentResponse: false,
             regexpFilterText: '$ref_value',
-            regexpFilterExpression: '^ft-\\w+[a-z0-9]*'
+            regexpFilterExpression: '(^feature\/([a-z0-9]+)(\/\w+)*|^release\/[0-9]+.[0-9]+)'
         )
     }
     stages {
         stage('create-feature-branch') {
+            when {
+                expression { params.ref_value ==~ /^feature\/([a-z0-9]+)(\/\w+)*/ }
+                expression { return params.ref_type == "branch" && params.x_github_event == "create" }
+                not {equals expected: 1, actual: params.ref_value.split('/').length}
+            }
             stages {
                 stage("provision database") {
-                    when {
-                        branch pattern: "ft-cbtrfdev*"
-                        expression { return params.ref_type == "branch" && params.x_github_event == "create" }
-                        not {equals expected: 1, actual: params.ref_value.split('/').length}
-                    }
                     environment {
                         DATABASENAME="${params.ref_value.split("/")[1].toLowerCase()}"
+                        BRANCH="${params.ref_value}"
                     }
                     steps {
-                        dir("examples/cloudbank/jenkins/backend-dev/scripts") {
-                            echo "Generating database for branch $GIT_BRANCH"
+                        dir("examples/cloudbank/jenkins") {
+                            echo 'Generating database for branch $BRANCH'
                             sh './generate-yaml-file.sh $DATABASENAME'
                         }
                         dir("$WORKSPACE/run") {
@@ -92,38 +96,47 @@ pipeline {
         }
         stage('create-release-branch') {
             when {
-                branch pattern: 'release-*'
+                expression { params.ref_value ==~ /^release\/\d+\.\d+(\.\w+)*$/ }
                 expression { return params.ref_type == "branch" && params.x_github_event == "create" }
             }
             environment {
-                RELEASE_VERSION="${GIT_BRANCH.split("-")[1]}"
-                APP_IMAGE="${DOCKER_REGISTRY}:$(RELEASE_VERSION)"
+                RELEASE_VERSION="${params.ref_value.split("/")[1]}"
+                APP_IMAGE="${DOCKER_REGISTRY}:${RELEASE_VERSION}"
+                OCIR_HTTP_REGISTRY="https://${REGION_KEY}.ocir.io"
             }
             stages {
                 stage("build") {
-                    dir("examples/cloudbank/backend-springboot") {
-                        sh "mvn clean package"
+                    steps {
+                        dir("examples/cloudbank/backend-springboot") {
+                            sh "mvn clean package"
+                            sh 'docker build -t ${APP_IMAGE} .'
+                        }
                     }
+
                 }
                 stage("push") {
-                    dir("examples/cloudbank/backend-springboot") {
-                        withDockerRegistry(credentialsId: ocir_credentials_id, url: http_registry) {
-                            sh 'docker push ${APP_IMAGE}'
-                            sh 'docker rmi ${APP_IMAGE}'
+                    steps{
+                        dir("examples/cloudbank/backend-springboot") {
+                            withDockerRegistry(credentialsId: 'cbworkshop_ocir_credentials_id', url: OCIR_HTTP_REGISTRY) {
+                                sh 'docker push ${APP_IMAGE}'
+                                sh 'docker rmi ${APP_IMAGE}'
+                            }
                         }
                     }
                 }
                 stage("deploy") {
-                    withKubeCredentials(kubectlCredentials: [[
-                        caCertificate: '',
-                        clusterName: env.CLUSTER_NAME,
-                        contextName: '',
-                        credentialsId: "cbworkshop-kubectl-token",
-                        namespace: env.CLUSTER_NAMESPACE,
-                        serverUrl: env.CLUSTER_SERVER_URL
-                        ]]) {
-                            sh('kubectl set image deployment/banka-springboot bank=${APP_IMAGE}')
-                            sh('kubectl set image deployment/bankb-springboot bank=${APP_IMAGE}')
+                    steps {
+                        withKubeCredentials(kubectlCredentials: [[
+                            caCertificate: '',
+                            clusterName: env.CLUSTER_NAME,
+                            contextName: '',
+                            credentialsId: "cbworkshop-kubectl-token",
+                            namespace: env.CLUSTER_NAMESPACE,
+                            serverUrl: env.CLUSTER_SERVER_URL
+                            ]]) {
+                                sh('kubectl set image deployment/banka-springboot bank=${APP_IMAGE}')
+                                sh('kubectl set image deployment/bankb-springboot bank=${APP_IMAGE}')
+                        }
                     }
                 }
                 stage("notify") {

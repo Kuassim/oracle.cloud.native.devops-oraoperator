@@ -3,6 +3,7 @@ package com.cloudbank.springboot.transfers;
 import com.cloudbank.springboot.transfers.objects.TransferInformation;
 import com.cloudbank.springboot.transfers.objects.TransferMessage;
 import com.cloudbank.springboot.transfers.objects.TransferOutcome;
+import com.cloudbank.springboot.transfers.objects.TransferOutcomeWithDateRecord;
 import com.cloudbank.springboot.transfers.utils.JsonUtils;
 import oracle.jdbc.OracleCallableStatement;
 import oracle.jdbc.OracleTypes;
@@ -56,7 +57,7 @@ public class TransferController {
         System.out.println("TransferController.enqueue transferInformation:" + transferInformation + " transferId:" + transferId);
         transferLedger.put(transferId, transferInformation);
         Date updated = adjustBalanceAndEnqueueTransfer(transferId, transferInformation);
-        return new TransferOutcome("success");
+        return new Transfer("success");
     }
 
     private Date adjustBalance(int amount, int account, AQjmsSession tsess) throws Exception {
