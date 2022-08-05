@@ -57,7 +57,7 @@ echo " - Compartment OCID"
 echo " - Tenancy OCID"
 echo " - Jenkins Password"
 echo "================================================="
-$CB_STATE_DIR/tasks/init-state-part-1.sh
+$CB_STATE_DIR/tasks/init-state-part1.sh
 
 
 # Set (3) Tokens for Jenkins
@@ -81,6 +81,6 @@ echo " - OCI Registry"
 echo " - User OCID"
 echo " - Fingerprint"
 echo "================================================="
-$CB_STATE_DIR/tasks/init-state-part-2.sh
+$CB_STATE_DIR/tasks/init-state-part2.sh
 
 
