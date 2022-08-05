@@ -57,7 +57,7 @@ public class TransferController {
         System.out.println("TransferController.enqueue transferInformation:" + transferInformation + " transferId:" + transferId);
         transferLedger.put(transferId, transferInformation);
         Date updated = adjustBalanceAndEnqueueTransfer(transferId, transferInformation);
-        return new Transfer("success");
+        return new TransferOutcome("success");
     }
 
     private Date adjustBalance(int amount, int account, AQjmsSession tsess) throws Exception {
