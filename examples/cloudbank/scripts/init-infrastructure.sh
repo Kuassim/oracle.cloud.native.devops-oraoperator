@@ -8,4 +8,6 @@ envfile=$CB_TERRAFORM_DIR/terraform.env
 echo 'DONE'
 
 # Run terraform
+echo -n 'Running terraform provisioning in the background...'
 $CB_STATE_DIR/tasks/terraform-create.sh &
+echo 'DONE'

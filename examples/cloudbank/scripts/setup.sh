@@ -1,13 +1,11 @@
 #!/bin/bash
 CURRENT_TIME=$( date '+%F_%H:%M:%S' )
 
-
 # Check if any of the necessary env variables exist
 if [ -z $CB_STATE_DIR ] | [ -z $CB_KUBERNETES_TEMPLATES_DIR ] | [ -z $CB_ROOT_DIR ]; then
   echo 'Error: Lab variables not set. Please source source.env first';
   exit 1;
 fi
-
 
 # Make directories for lab-related files
 echo -n 'Beginning Lab setup...'
@@ -53,8 +51,13 @@ echo ''
 
 # Prompt user for input on setup
 echo "================================================="
-echo 'To continue, the lab requires more information...'
-$CB_STATE_DIR/init-state.sh
+echo 'The lab requires the following information to provision resources on OCI...'
+echo " - Region"
+echo " - Compartment OCID"
+echo " - Tenancy OCID"
+echo " - Jenkins Password"
+echo "================================================="
+$CB_STATE_DIR/tasks/init-state-part-1.sh
 
 
 # Set (3) Tokens for Jenkins
@@ -64,6 +67,20 @@ echo 'DONE'
 echo ''
 
 # Run terraform
-echo 'The lab requires more information...'
+echo "Terraforming Resources on OCI..."
 $CB_STATE_DIR/init-infrastructure.sh
 echo ''
+
+# Continue rest of retrieving values from end-user
+echo "================================================="
+echo 'The lab requires the following information to provision resources on OCI...'
+echo " - Database Password"
+echo " - Frontend Login Password"
+echo " - Region Key"
+echo " - OCI Registry"
+echo " - User OCID"
+echo " - Fingerprint"
+echo "================================================="
+$CB_STATE_DIR/tasks/init-state-part-2.sh
+
+
