@@ -27,7 +27,10 @@ fi
 echo "creating frontend deployment and service..."
 # resource locations and copying from template
 FRONTEND_MANIFEST=$CB_STATE_DIR/generated/frontend-manifest.yaml
-cp $CB_ROOT_DIR/frontend-springboot/manifest.yaml $FRONTEND_MANIFEST
+cp $CB_ROOT_DIR/frontend-springboot/deployment.yaml $FRONTEND_MANIFEST
+
+FRONTEND_SERVICE=$CB_STATE_DIR/generated/frontend-service.yaml
+cp $CB_ROOT_DIR/frontend-springboot/service.yaml $FRONTEND_SERVICE
 
 # Replacing Container Image
 sed -e  "s|%CLOUDBANK_APP_IMAGE%|$FRONTEND_IMAGE|g" $FRONTEND_MANIFEST > /tmp/manifest-$CURRENTTIME.yaml
@@ -54,4 +57,5 @@ mv -- /tmp/manifest-$CURRENTTIME.yaml $FRONTEND_MANIFEST
 
 # Apply Manifest
 kubectl apply -f $FRONTEND_MANIFEST
+kubectl apply -f $FRONTEND_SERVICE
 

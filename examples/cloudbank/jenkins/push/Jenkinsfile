@@ -3,10 +3,14 @@ pipeline {
     tools {
         maven "m3"
     }
+    parameters {
+        string(name: 'ref_value', defaultValue: '', description: 'Payload ref')
+    }
+
     stages {
         stage('push-to-feature-branch') {
             when {
-                expression { params.ref_value ==~ /^feature\/([a-z0-9]+)(\/\w+)*/ }
+                expression { GIT_BRANCH ==~ /^feature\/([a-z0-9]+)(\/\w+)*/ }
             }
             stages {
                 stage("build") {

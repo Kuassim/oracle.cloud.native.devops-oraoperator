@@ -2,7 +2,7 @@
 CURRENT_TIME=$( date '+%F_%H:%M:%S' )
 
 # create log-file and set state
-state_set '.state.terminate|= $VAL' STARTED
+state_set '.state.terminate.STARTED |= $VAL' "$( date '+%F_%H:%M:%S' )"
 touch $CB_STATE_DIR/logs/$CURRENT_TIME-kubectl-version.log
 
 # if kubernetes cluster exists
@@ -34,5 +34,5 @@ echo 'DONE'
 $CB_STATE_DIR/tasks/terraform-destroy.sh &
 
 # return
-state_set '.state.terminate|= $VAL' DONE
+state_set '.state.terminate.DONE |= $VAL' "$( date '+%F_%H:%M:%S' )"
 cd $LAB_HOME

@@ -8,7 +8,7 @@ pipeline {
     parameters {
         string(name: 'ref_value', defaultValue: '', description: 'Payload ref')
         string(name: 'x_github_event', defaultValue: '', description: 'Header X-Github-Event')
-        string(name:  'ref_type', defaultValue: '', description: 'Payload ref_type')
+        string(name: 'ref_type', defaultValue: '', description: 'Payload ref_type')
     }
     triggers {
         GenericTrigger(
