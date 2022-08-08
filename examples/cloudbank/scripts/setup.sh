@@ -77,7 +77,6 @@ echo 'The lab requires the following information to provision resources on OCI..
 echo " - Database Password"
 echo " - Frontend Login Password"
 echo " - Region Key"
-echo " - OCI Registry"
 echo " - User OCID"
 echo " - Fingerprint"
 echo "================================================="
