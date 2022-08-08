@@ -23,7 +23,7 @@ echo "SET"
 # requires Reqion Key
 #  -p "Enter the region-key to use (e.g. phx, iad, etc.): " RKEY
 REGION=$(state_get '.lab.region.identifier')
-RKEY=$(oci iam region list | jq -r --arg $REGION "${REGION}" '.data[] | select (.name == $REGION} | .key ')
+RKEY=$(oci iam region list | jq -r --arg REGION "${REGION}" '.data[] | select (.name == $REGION) | .key ')
 state_set '.lab.region.key |= $VAL' $RKEY
 
 # requires OCIR registry
