@@ -34,5 +34,4 @@ echo 'DONE'
 $CB_STATE_DIR/tasks/terraform-destroy.sh &
 
 # return
-state_set '.state.terminate.DONE |= $VAL' "$( date '+%F_%H:%M:%S' )"
 cd $LAB_HOME

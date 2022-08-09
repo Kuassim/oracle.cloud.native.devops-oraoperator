@@ -3,7 +3,6 @@
 # This script will require the user to enter the following:
 # - Database Password
 # - Frontend Login Password
-# - Region Key
 # - OCI Registry
 # - User OCID
 # - Fingerprint
@@ -22,8 +21,14 @@ state_set '.lab.pwd.login |= $VAL' $FEPWD
 echo "SET"
 
 # requires Reqion Key
-read -p "Enter the region-key to use (e.g. phx, iad, etc.): " RKEY
+#  -p "Enter the region-key to use (e.g. phx, iad, etc.): " RKEY
+REGION=$(state_get '.lab.region.identifier')
+RKEY=$(oci iam region list | jq -r --arg REGION "${REGION}" '.data[] | select (.name == $REGION) | .key ')
 state_set '.lab.region.key |= $VAL' $RKEY
+
+# requires Tenancy Namespace
+NS=$((cd $CB_STATE_DIR ; ./get-tenancy-namespace.sh $(state_get .lab.ocid.tenancy) ))
+state_set '.lab.tenancy.namespace |= $VAL' $NS
 
 # requires OCIR registry
 namespace=$(oci os ns get | jq -r .data)
@@ -33,6 +38,10 @@ state_set '.lab.docker_registry |= $VAL' $OCIR
 # requires user OCID
 read -p "Enter the user OCID to authenticate provisioning with: " uOCID
 state_set '.lab.ocid.user |= $VAL' $uOCID
+
+# requires username
+uNAME=$((cd $CB_STATE_DIR ; ./get-user-name.sh $uOCID ))
+state_set '.lab.username |= $VAL' $uNAME
 
 # requires Fingerprint
 read -p "Enter user fingerprint to authenticate provisioning with: " fPRINTVAL
