@@ -19,9 +19,13 @@ source ${CB_STATE_DIR}/state_functions.env
 
 if [ -f ~/.bashrc ]; then
   # for BASH
+  # create backup
+  mv ~/.bashrc ~/.bashrc-cbworkshop-backup
   cat $CB_STATE_DIR/source.env >> ~/.bashrc
 elif
   [ -f ~/.zshrc ]; then
   # for ZSH
+  # create backup
+  mv ~/.bashrc ~/.bashrc-cbworkshop-backup
   cat $CB_STATE_DIR/source.env >> ~/.zshrc
 fi
