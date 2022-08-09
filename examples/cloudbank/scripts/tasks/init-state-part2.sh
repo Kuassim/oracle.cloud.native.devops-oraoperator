@@ -27,11 +27,11 @@ RKEY=$(oci iam region list | jq -r --arg REGION "${REGION}" '.data[] | select (.
 state_set '.lab.region.key |= $VAL' $RKEY
 
 # requires Tenancy Namespace
-NS=$((cd $CB_STATE_DIR ; ./get-tenancy-namespace.sh $(state_get .lab.ocid.tenancy) ))
+NS=$((cd $CB_STATE_DIR/tasks ; ./get-tenancy-namespace.sh ))
 state_set '.lab.tenancy.namespace |= $VAL' $NS
 
 # requires OCIR registry
-namespace=$(oci os ns get | jq -r .data)
+namespace=$(state_get .lab.tenancy.namespace)
 OCIR="${RKEY}.ocir.io/${namespace}/cloudbank"
 state_set '.lab.docker_registry |= $VAL' $OCIR
 
