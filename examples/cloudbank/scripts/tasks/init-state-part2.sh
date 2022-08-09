@@ -31,8 +31,7 @@ NS=$((cd $CB_STATE_DIR/tasks ; ./get-tenancy-namespace.sh ))
 state_set '.lab.tenancy.namespace |= $VAL' $NS
 
 # requires OCIR registry
-namespace=$(state_get .lab.tenancy.namespace)
-OCIR="${RKEY}.ocir.io/${namespace}/cloudbank"
+OCIR="${RKEY}.ocir.io/${NS}/cloudbank"
 state_set '.lab.docker_registry |= $VAL' $OCIR
 
 # requires user OCID
