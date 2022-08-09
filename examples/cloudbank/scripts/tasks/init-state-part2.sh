@@ -26,6 +26,10 @@ REGION=$(state_get '.lab.region.identifier')
 RKEY=$(oci iam region list | jq -r --arg REGION "${REGION}" '.data[] | select (.name == $REGION) | .key ')
 state_set '.lab.region.key |= $VAL' $RKEY
 
+# requires Tenancy Namespace
+NS=$((cd $CB_STATE_DIR ; ./get-tenancy-namespace.sh $(state_get .lab.ocid.tenancy) ))
+state_set '.lab.tenancy.namespace |= $VAL' $NS
+
 # requires OCIR registry
 namespace=$(oci os ns get | jq -r .data)
 OCIR="${RKEY}.ocir.io/${namespace}/cloudbank"
@@ -34,6 +38,10 @@ state_set '.lab.docker_registry |= $VAL' $OCIR
 # requires user OCID
 read -p "Enter the user OCID to authenticate provisioning with: " uOCID
 state_set '.lab.ocid.user |= $VAL' $uOCID
+
+# requires username
+uNAME=$((cd $CB_STATE_DIR ; ./get-user-name.sh $uOCID ))
+state_set '.lab.username |= $VAL' $uNAME
 
 # requires Fingerprint
 read -p "Enter user fingerprint to authenticate provisioning with: " fPRINTVAL
