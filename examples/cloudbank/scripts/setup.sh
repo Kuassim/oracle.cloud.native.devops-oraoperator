@@ -38,10 +38,10 @@ cp -r $CB_ROOT_DIR/scripts/* $CB_STATE_DIR
 echo 'DONE'
 
 
-# Set source env inside bashrc
-echo -n 'Saving Lab settings...'
-$CB_ROOT_DIR/save_source.sh
-echo 'DONE'
+# # Set source env inside bashrc
+# echo -n 'Saving Lab settings...'
+# $CB_ROOT_DIR/save_source.sh
+# echo 'DONE'
 
 # Copy Terraform into state directory
 echo -n 'Copying Lab terraform files...'
