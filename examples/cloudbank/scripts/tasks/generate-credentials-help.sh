@@ -16,7 +16,7 @@ state_set '.lab.credentials.delete_branch_webhook.id |= $VAL' 'cbworkshop-delete
 state_set '.lab.credentials.delete_branch_webhook.kind |= $VAL' 'secret_text'
 state_set '.lab.credentials.delete_branch_webhook.secret |= $VAL' "$DELETE_BRANCH_TOKEN"
 
-PUSH_BRANCH_TOKEN="$(.lab.tokens.push_branch_webhook.secret)"
+PUSH_BRANCH_TOKEN="$(state_get .lab.tokens.push_branch_webhook.secret)"
 state_set '.lab.credentials.push_branch_webhook.id |= $VAL' 'cbworkshop-push-token'
 state_set '.lab.credentials.push_branch_webhook.kind |= $VAL' 'secret_text'
 state_set '.lab.credentials.push_branch_webhook.secret |= $VAL' "$PUSH_BRANCH_TOKEN"
