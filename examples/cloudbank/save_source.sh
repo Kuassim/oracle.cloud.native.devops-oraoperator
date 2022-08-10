@@ -15,17 +15,14 @@ export CB_KUBERNETES_GEN_FILES_DIR=${CB_KUBERNETES_GEN_FILES_DIR}
 
 source ${CB_STATE_DIR}/state_functions.env
 # ====================== END CLOUDBANK SOURCE ENV ==========================
-""" >> $CB_STATE_DIR/source.env
+""" > $CB_STATE_DIR/source.env
 
 if [ -f ~/.bashrc ]; then
-  # for BASH
-  # create backup
-  mv ~/.bashrc ~/.bashrc-cbworkshop-backup
+  # for BASH, create backup
+  cp ~/.bashrc ~/.bashrc-cbworkshop-backup
   cat $CB_STATE_DIR/source.env >> ~/.bashrc
-elif
-  [ -f ~/.zshrc ]; then
-  # for ZSH
-  # create backup
-  mv ~/.bashrc ~/.bashrc-cbworkshop-backup
+elif [ -f ~/.zshrc ]; then
+  # for ZSH, create backup
+  cp ~/.zshrc ~/.zshrc-cbworkshop-backup
   cat $CB_STATE_DIR/source.env >> ~/.zshrc
 fi
