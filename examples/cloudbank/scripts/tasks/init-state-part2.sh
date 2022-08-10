@@ -27,7 +27,7 @@ RKEY=$(oci iam region list | jq -r --arg REGION "${REGION}" '.data[] | select (.
 state_set '.lab.region.key |= $VAL' $RKEY
 
 # requires Tenancy Namespace
-NS=$((cd $CB_STATE_DIR/tasks ; ./get-tenancy-namespace.sh ))
+NS=$(cd $CB_STATE_DIR/tasks ; ./get-tenancy-namespace.sh )
 state_set '.lab.tenancy.namespace |= $VAL' $NS
 
 # requires OCIR registry
@@ -39,7 +39,7 @@ read -p "Enter the user OCID to authenticate provisioning with: " uOCID
 state_set '.lab.ocid.user |= $VAL' $uOCID
 
 # requires username
-uNAME=$((cd $CB_STATE_DIR ; ./get-user-name.sh $uOCID ))
+uNAME=$(cd $CB_STATE_DIR/tasks ; ./get-user-name.sh $uOCID )
 state_set '.lab.username |= $VAL' $uNAME
 
 # requires Fingerprint
