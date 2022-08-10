@@ -20,3 +20,5 @@ PUSH_WEBHOOK_ADDRESS="${IP_ADDRESS}/multibranch-webhook-trigger/invoke?token=${P
 state_set '.lab.webhooks.push_branch_webhook.payload_url |= $VAL' $PUSH_WEBHOOK_ADDRESS
 state_set '.lab.webhooks.push_branch_webhook.content_type |= $VAL' "application/json"
 state_set '.lab.webhooks.push_branch_webhook.event |= $VAL' "Just_the_push_event"
+
+state_get '.lab.webhooks'

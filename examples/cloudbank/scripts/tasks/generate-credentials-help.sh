@@ -64,3 +64,6 @@ state_set '.lab.credentials.ocir_credentials.id |= $VAL' 'cbworkshop_ocir_creden
 state_set '.lab.credentials.ocir_credentials.kind |= $VAL' 'username_with_password'
 state_set '.lab.credentials.ocir_credentials.username |= $VAL' $YOUR_OCIR_USERNAME
 state_set '.lab.credentials.ocir_credentials.secret |= $VAL' "$YOUR_OCIR_CREDENTIALS"
+
+
+state_get '.lab.credentials'
