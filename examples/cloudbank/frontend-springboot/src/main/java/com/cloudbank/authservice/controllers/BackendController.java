@@ -14,7 +14,7 @@ import java.net.URI;
 
 @RestController
 @RequestMapping("/api/transfer")
-public class TransferGatewayController {
+public class BackendController {
 
     @Autowired
     private Environment environment;
