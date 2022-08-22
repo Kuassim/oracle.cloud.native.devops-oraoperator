@@ -6,7 +6,7 @@ PYTHON_FUNCTION=$CB_STATE_DIR/tasks/generate.py
 # check if this script needs to run again
 COMPLETED_BEFORE=$(state_get .state.tokens.SET)
 if [ -z "$COMPLETED_BEFORE" ]; then
-  exit 0;
+  return 0;
 fi;
 
 # create tokens

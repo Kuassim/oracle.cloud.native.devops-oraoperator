@@ -21,7 +21,7 @@ source ${CB_STATE_DIR}/state_functions.env
 # check if this script needs to run again
 COMPLETED_BEFORE=$(state_get .state.source.SET)
 if [ -z "$COMPLETED_BEFORE" ]; then
-  exit 0;
+  return 0;
 fi;
 
 # check bashrc
