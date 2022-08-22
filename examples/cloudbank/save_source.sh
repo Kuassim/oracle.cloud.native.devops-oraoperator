@@ -2,6 +2,7 @@
 # expects state_functions.env to exist inside CB_STATE_DIR
 # expects environment variables set by source.env or ~/.bashrc
 
+# write state/source.env
 echo """
 # ====================== BEGIN CLOUDBANK SOURCE ENV ======================
 
@@ -17,12 +18,24 @@ source ${CB_STATE_DIR}/state_functions.env
 # ====================== END CLOUDBANK SOURCE ENV ==========================
 """ > $CB_STATE_DIR/source.env
 
+# check if this script needs to run again
+COMPLETED_BEFORE=$(state_get .state.source.SET)
+if [ -z "$COMPLETED_BEFORE" ]; then
+  exit 0;
+fi;
+
+# check bashrc
 if [ -f ~/.bashrc ]; then
   # for BASH, create backup
   cp ~/.bashrc ~/.bashrc-cbworkshop-backup
   cat $CB_STATE_DIR/source.env >> ~/.bashrc
+
 elif [ -f ~/.zshrc ]; then
   # for ZSH, create backup
   cp ~/.zshrc ~/.zshrc-cbworkshop-backup
   cat $CB_STATE_DIR/source.env >> ~/.zshrc
+
 fi
+
+# mark done
+state_set '.state.source.SET |= $VAL' "$( date '+%F_%H:%M:%S' )"

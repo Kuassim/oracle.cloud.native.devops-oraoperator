@@ -38,10 +38,11 @@ cp -r $CB_ROOT_DIR/scripts/* $CB_STATE_DIR
 echo 'DONE'
 
 
-# # Set source env inside bashrc
-# echo -n 'Saving Lab settings...'
-# $CB_ROOT_DIR/save_source.sh
-# echo 'DONE'
+# Set source env inside bashrc
+echo -n 'Saving Lab settings...'
+$CB_ROOT_DIR/save_source.sh
+echo 'DONE'
+
 
 # Copy Terraform into state directory
 echo -n 'Copying Lab terraform files...'
@@ -66,10 +67,12 @@ $CB_STATE_DIR/tasks/generate-tokens.sh
 echo 'DONE'
 echo ''
 
+
 # Run terraform
 echo "Terraforming Resources on OCI..."
 $CB_STATE_DIR/init-infrastructure.sh
 echo ''
+
 
 # Continue rest of retrieving values from end-user
 echo "================================================="
