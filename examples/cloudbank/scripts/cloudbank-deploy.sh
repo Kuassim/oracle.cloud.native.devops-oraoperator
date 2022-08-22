@@ -21,4 +21,4 @@ APP_BE_BUILD_SCRIPT_FILENAME="deploy.sh"
 # Build
 state_set '.state.apps.cloudbank_backend.DEPLOY_STARTED |= $VAL' "$( date '+%F_%H:%M:%S' )"
 (cd "$APP_BE_BUILD_SCRIPT_LOCATION" || exit ; sh "$APP_BE_BUILD_SCRIPT_FILENAME")
-state_set '.state.apps.cloudbank_backend/DEPLOY_COMPLETED |= $VAL' "$( date '+%F_%H:%M:%S' )"
+state_set '.state.apps.cloudbank_backend.DEPLOY_COMPLETED |= $VAL' "$( date '+%F_%H:%M:%S' )"

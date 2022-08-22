@@ -16,7 +16,7 @@ state_set '.lab.credentials.delete_branch_webhook.id |= $VAL' 'cbworkshop-delete
 state_set '.lab.credentials.delete_branch_webhook.kind |= $VAL' 'secret_text'
 state_set '.lab.credentials.delete_branch_webhook.secret |= $VAL' "$DELETE_BRANCH_TOKEN"
 
-PUSH_BRANCH_TOKEN="$(.lab.tokens.push_branch_webhook.secret)"
+PUSH_BRANCH_TOKEN="$(state_get .lab.tokens.push_branch_webhook.secret)"
 state_set '.lab.credentials.push_branch_webhook.id |= $VAL' 'cbworkshop-push-token'
 state_set '.lab.credentials.push_branch_webhook.kind |= $VAL' 'secret_text'
 state_set '.lab.credentials.push_branch_webhook.secret |= $VAL' "$PUSH_BRANCH_TOKEN"
@@ -64,3 +64,6 @@ state_set '.lab.credentials.ocir_credentials.id |= $VAL' 'cbworkshop_ocir_creden
 state_set '.lab.credentials.ocir_credentials.kind |= $VAL' 'username_with_password'
 state_set '.lab.credentials.ocir_credentials.username |= $VAL' $YOUR_OCIR_USERNAME
 state_set '.lab.credentials.ocir_credentials.secret |= $VAL' "$YOUR_OCIR_CREDENTIALS"
+
+
+state_get '.lab.credentials'
